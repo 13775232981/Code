@@ -14,21 +14,11 @@ int main(void)
 	
 	GPIO_Init(GPIOA, &GPIO_InitStruct);
 	
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10;
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPU;
-	GPIO_Init(GPIOA, &GPIO_InitStruct);
-	
-
-	
 	while(1)
 	{
-		if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_10) == Bit_RESET)
-		{
-			GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_SET);
-		}
-		else
-		{
-			GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_RESET);
-		}
+		GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_RESET);
+		Delay(250);
+		GPIO_WriteBit(GPIOA, GPIO_Pin_0, Bit_SET);
+		Delay(250);
 	}
 }
