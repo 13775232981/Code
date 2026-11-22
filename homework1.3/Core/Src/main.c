@@ -43,7 +43,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-volatile uint32_t key_edge_count = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -87,36 +87,13 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-	GPIO_PinState stable_level = GPIO_PIN_SET;
-	GPIO_PinState canditate_level = GPIO_PIN_SET;
-	uint32_t scan_last = HAL_GetTick();
-	uint32_t candidate_since = scan_last;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		uint32_t now = HAL_GetTick();
-		if((uint32_t)(now - candidate_since) >= 1U)
-		{
-			scan_last = now;
-			GPIO_PinState level = HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin);
-			if(level != canditate_level)
-			{
-				canditate_level = level;
-				candidate_since = now;
-			}
-			else if(level != stable_level && (uint32_t)(now - candidate_since) >= 20U)
-			{
-				stable_level = level;
-				if(stable_level == GPIO_PIN_RESET)
-				{
-					HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-				}
-			}
-		}
-		
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -166,10 +143,23 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	if(GPIO_Pin == KEY_Pin)
-	{
-		key_edge_count++;
-	}
+  static uint32_t last_scan = 0U;
+
+  if (GPIO_Pin == KEY_Pin)
+  {
+    uint32_t now = HAL_GetTick();
+		
+    if ((uint32_t)(now - last_scan) >= 20U)
+    {
+      HAL_Delay(20);
+      last_scan = HAL_GetTick();
+			
+      if (HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin) == GPIO_PIN_RESET)
+      {
+        HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+      }
+    }
+  }
 }
 /* USER CODE END 4 */
 
