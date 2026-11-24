@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -86,8 +87,9 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-
+ 
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -143,17 +145,17 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  static uint32_t last_scan = 0U;
+  static uint32_t last_debounce_tick = 0U;
 
   if (GPIO_Pin == KEY_Pin)
   {
     uint32_t now = HAL_GetTick();
-		
-    if ((uint32_t)(now - last_scan) >= 20U)
+
+    if ((uint32_t)(now - last_debounce_tick) >= 20U)
     {
       HAL_Delay(20);
-      last_scan = HAL_GetTick();
-			
+      last_debounce_tick = HAL_GetTick();
+
       if (HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin) == GPIO_PIN_RESET)
       {
         HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
