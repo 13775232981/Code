@@ -70,8 +70,8 @@ int main(void)
   double duty_led = 0;
   uint16_t arr_led = 0;
   uint16_t ccr_led = 0;
-  int16_t ccr_dj = 100;
-  int16_t fx = 1;
+  uint16_t ccr_dj = 100;
+  uint16_t fx = 1;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -110,11 +110,6 @@ int main(void)
     arr_led = __HAL_TIM_GET_AUTORELOAD(&htim2);
     ccr_led = duty_led * (arr_led + 1);
 		
-//    if (ccr_led > arr_led)
-//    {
-//      ccr_led = arr_led;
-//    }
-
     __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, ccr_led);
 		
 		
@@ -124,12 +119,10 @@ int main(void)
 
     if (ccr_dj >= 500)
     {
-      ccr_dj = 500;
       fx = -1;
     }
     else if (ccr_dj <= 100)
     {
-      ccr_dj = 100;
       fx = 1;
     }
 
