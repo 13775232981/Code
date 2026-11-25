@@ -71,7 +71,7 @@ int main(void)
   uint16_t arr_led = 0;
   uint16_t ccr_led = 0;
   uint16_t ccr_dj = 100;
-  uint16_t fx = 1;
+  uint16_t fx = 3;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -115,18 +115,18 @@ int main(void)
 		
     __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, ccr_dj);
 
-    ccr_dj = ccr_dj + fx * 2;
+    ccr_dj = ccr_dj + fx;
 
     if (ccr_dj >= 500)
     {
-      fx = -1;
+      fx = -3;
     }
     else if (ccr_dj <= 100)
     {
-      fx = 1;
+      fx = 3;
     }
 
-    HAL_Delay(10);
+    HAL_Delay(5);
 
     /* USER CODE END WHILE */
 
