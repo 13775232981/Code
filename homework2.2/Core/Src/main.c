@@ -112,16 +112,15 @@ int main(void)
 		
     __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, ccr_led);
 		
-		
     __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, ccr_dj);
-
-    ccr_dj = ccr_dj + fx;
-
-    if (ccr_dj >= 500)
+    
+		ccr_dj = ccr_dj + fx;
+		
+    if(ccr_dj >= 500)
     {
       fx = -3;
     }
-    else if (ccr_dj <= 100)
+    else if(ccr_dj <= 100)
     {
       fx = 3;
     }
